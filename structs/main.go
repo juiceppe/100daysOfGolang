@@ -10,7 +10,7 @@ type userInfo struct {
 type user struct {
 	firstName string
 	lastName  string
-	info      userInfo
+	userInfo  //we can omit the field name! Go will assume that the fieldname will be the same as the embedded struct, in this case userInfo
 }
 
 func main() {
@@ -19,7 +19,7 @@ func main() {
 	user2 := user{
 		firstName: "User",
 		lastName:  "Two",
-		info: userInfo{
+		userInfo: userInfo{
 			email:   "user2@user2.com",
 			zipCode: 91025,
 		},
@@ -29,6 +29,20 @@ func main() {
 	user3.firstName = "User"
 	user3.lastName = "Three"
 	//fmt.Println(user3)       can't print an empty struct, showing just { }
-	fmt.Printf("%+v", user2) //%+v will print all the fields and print them for user3, if user3 is empty it will show {firstName: lastName:}
+	//fmt.Printf("%+v", user2) //%+v will print all the fields and print them for user3, if user3 is empty it will show {firstName: lastName:}
+	//user2Pointer := &user2 //& is an operator that we need to use when we want to access memory address for that var, we transform user2 into a pointer and assign it to user2Pointer
+	user2.updateUser("updatedName")
+	user2.print()
 	//fmt.Println(user2, user3)
+}
+
+//receiver with struct
+func (u user) print() {
+	fmt.Printf("%+v", u)
+}
+
+//Update struct
+func (pointerToUser *user) updateUser(newFirstName string) {
+	// '*'in this case is *user it means we're working with a pointer to an user type
+	(*pointerToUser).firstName = newFirstName //the '*' operator is used to get value that is existing at that memory address - a pointer that point at that user
 }
